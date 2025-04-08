@@ -1,17 +1,23 @@
 {
-  "name": "rainlink",
-  "version": "1.2.7",
+  "name": "@kenabot/rainlink",
+  "version": "0.0.1",
+  "originalVersion": "1.2.7",
   "description": "Another lavalink wrapper but focus on stability and rich features",
   "repository": {
     "type": "git",
-    "url": "https://github.com/RainyXeon/Rainlink.git"
+    "url": "https://github.com/KenaBot/Rainlink.git"
+  },
+  "publishConfig": {
+    "registry": "http://157.90.90.43:4873"
   },
   "scripts": {
     "build": "npx tsup-node",
     "prettier": "npx prettier -w ./src",
     "build:doc": "typedoc --options ./typedoc.json --sort kind",
     "build:full": "npm run prettier && npm run build:eslint && npm run build && npm run build:doc",
-    "build:eslint": "npx eslint ./src --fix"
+    "build:eslint": "npx eslint ./src --fix",
+    "pub": "npm publish --registry http://10.144.46.204:4873",
+    "adduser": "npm adduser --registry http://10.144.46.204:4873"
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -40,22 +46,22 @@
   "author": "RainyXeon",
   "license": "GPL-3.0",
   "devDependencies": {
-    "@eslint/eslintrc": "^3.1.0",
-    "@eslint/js": "^9.10.0",
-    "@types/bun": "^1.1.9",
-    "@types/node": "^22.5.4",
-    "@types/node-fetch": "^2.6.11",
-    "@typescript-eslint/eslint-plugin": "^8.5.0",
-    "@typescript-eslint/parser": "^8.5.0",
-    "discord.js": "^14.14.1",
-    "dokdo": "^1.0.1",
-    "dotenv": "^16.4.5",
-    "eslint": "^9.10.0",
-    "globals": "^15.9.0",
-    "prettier": "^3.2.5",
-    "tsup": "^8.3.0",
-    "typedoc": "^0.26.7",
-    "typescript": "^5.6.2"
+    "@eslint/eslintrc": "3.1.0",
+    "@eslint/js": "9.10.0",
+    "@types/bun": "1.1.9",
+    "@types/node": "22.5.4",
+    "@types/node-fetch": "2.6.11",
+    "@typescript-eslint/eslint-plugin": "8.5.0",
+    "@typescript-eslint/parser": "8.5.0",
+    "discord.js": "14.14.1",
+    "dokdo": "1.0.1",
+    "dotenv": "16.4.5",
+    "eslint": "9.10.0",
+    "globals": "15.9.0",
+    "prettier": "3.2.5",
+    "tsup": "8.3.0",
+    "typedoc": "0.26.7",
+    "typescript": "5.6.2"
   },
   "tsup": {
     "dts": true,
