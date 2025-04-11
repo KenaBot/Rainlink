@@ -410,11 +410,7 @@ export class RainlinkWebsocket extends EventEmitter {
 					this.continueInfo.type = headers.opcode;
 					this.continueInfo.buffer.push(headers.buffer);
 				} else {
-					this.emit(
-						"message",
-						headers.opcode === 0x1 ? headers.buffer.toString("utf8") : headers.buffer.toString("utf8"),
-						headers.opcode === 0x1
-					);
+					this.emit("message", headers.buffer.toString("utf8"), headers.opcode === 0x1);
 				}
 
 				break;
@@ -447,9 +443,11 @@ export class RainlinkWebsocket extends EventEmitter {
 
 			case 0xa: {
 				this.emit("pong");
+
+				// TODO: Delete break;
+				break;
 			}
 
-			// eslint-disable-next-line no-fallthrough
 			default: {
 				this.close(1002, "Invalid opcode");
 				this.cleanup();
