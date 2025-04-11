@@ -1,9 +1,9 @@
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const packages = require('../package.json')
+const packages = require("../package.json");
 
 /** @ignore */
 export const metadata = {
-	name: 'rainlink',
-	version: packages ? packages.version : '1.0.0',
-	github: 'https://github.com/RainyXeon/Rainlink',
-}
+	name: "rainlink",
+	version: packages ? packages.version : "1.0.0",
+	github: "https://github.com/KenaBot/Rainlink"
+};
