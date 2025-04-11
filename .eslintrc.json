@@ -24,7 +24,7 @@
 			"extends": ["xo-typescript", "prettier"],
 			"files": ["*.ts", "*.tsx"],
 			"rules": {
-				"@typescript-eslint/no-unused-vars":  ["warn", { "argsIgnorePattern": "^_" }],
+				"@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
 				"@typescript-eslint/consistent-type-definitions": "off",
 				"@typescript-eslint/prefer-nullish-coalescing": "off",
 				"@typescript-eslint/no-empty-function": "off",
@@ -68,6 +68,7 @@
 		"max-depth": "off",
 		"guard-for-in": "off",
 		"no-unreachable-loop": "off",
-		"no-negated-condition": "off"
+		"no-negated-condition": "off",
+		"no-bitwise": "off"
 	}
 }
