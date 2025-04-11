@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const packages = require("../package.json");
+import packages from "../package.json";
 
 /** @ignore */
 export const metadata = {

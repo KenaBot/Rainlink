@@ -16,10 +16,10 @@ export * from "./Node/RainlinkPlayerEvents";
 // Export manager class
 export * from "./Manager/RainlinkNodeManager";
 export * from "./Manager/RainlinkPlayerManager";
-//// Export library class
+/// / Export library class
 export * from "./Library/AbstractLibrary";
 export { Library };
-//Export interface
+// Export interface
 export * from "./Interface/Connection";
 export * from "./Interface/Constants";
 export * from "./Interface/Manager";
@@ -43,4 +43,4 @@ export * from "./Utilities/AbstractDecoder";
 export * from "./Utilities/LavalinkDecoder";
 // Export metadata
 export * from "./metadata";
-export const version = metadata.version;
+export const { version } = metadata;
