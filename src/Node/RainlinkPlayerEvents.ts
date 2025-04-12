@@ -1,4 +1,4 @@
-import { RainlinkEvents, RainlinkPlayerState } from "../Interface/Constants";
+import { RainlinkEvents, RainlinkLoopMode, RainlinkPlayerState } from "../Interface/Constants";
 import { LavalinkEventsEnum } from "../Interface/LavalinkEvents";
 import type { Rainlink } from "../Rainlink";
 
@@ -64,10 +64,8 @@ export class RainlinkPlayerEvents {
 				return player.play();
 			}
 
-			// if (player.loop == RainlinkLoopMode.SONG && player.queue.current)
-			// 	player.queue.unshift(player.queue.current)
-			// if (player.loop == RainlinkLoopMode.QUEUE && player.queue.current)
-			// 	player.queue.push(player.queue.current)
+			if (player.loop === RainlinkLoopMode.SONG && player.queue.current) player.queue.unshift(player.queue.current);
+			if (player.loop === RainlinkLoopMode.QUEUE && player.queue.current) player.queue.push(player.queue.current);
 
 			if (player.queue.current) player.queue.previous.push(player.queue.current);
 			const currentSong = player.queue.current;
