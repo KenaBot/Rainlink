@@ -180,10 +180,11 @@ export class RainlinkWebsocket extends EventEmitter {
 		let payloadLength = options.len;
 		let mask = null;
 
+		// Updated crypto.randomFillSync to use Uint8Array
 		if (options.mask) {
-			mask = Buffer.allocUnsafe(4);
+			mask = new Uint8Array(4);
 
-			while ((mask[0] | mask[1] | mask[2] | mask[3]) === 0) crypto.randomFillSync(mask, 0, 4);
+			while ((mask[0] | mask[1] | mask[2] | mask[3]) === 0) crypto.randomFillSync(mask);
 
 			payloadStartIndex += 4;
 		}
@@ -206,19 +207,22 @@ export class RainlinkWebsocket extends EventEmitter {
 			header.writeUIntBE(options.len, 2, 6);
 		}
 
-		if (options.mask) {
-			header[1] |= 128;
+		// Added null checks for mask
+		if (mask) {
 			header[payloadStartIndex - 4] = mask[0];
 			header[payloadStartIndex - 3] = mask[1];
 			header[payloadStartIndex - 2] = mask[2];
 			header[payloadStartIndex - 1] = mask[3];
 
 			for (let i = 0; i < options.len; i++) {
-				data[i] = data[i] ^ mask[i & 3];
+				data[i] ^= mask[i & 3];
 			}
 		}
 
-		this.socket?.write(Buffer.concat([header, data]));
+		// Updated Buffer.concat to use Uint8Array
+		const headerArray = new Uint8Array(header);
+		const dataArray = new Uint8Array(data);
+		this.socket?.write(new Uint8Array([...headerArray, ...dataArray]));
 
 		return true;
 	}
@@ -254,19 +258,19 @@ export class RainlinkWebsocket extends EventEmitter {
 
 	/** @ignore */
 	public on<K extends keyof RWSEvents>(event: K, listener: (...args: RWSEvents[K]) => void): this {
-		super.on(event as string, (...args: any) => listener(...args));
+		super.on(event as string, (...args: RWSEvents[K]) => listener(...args));
 		return this;
 	}
 
 	/** @ignore */
 	public once<K extends keyof RWSEvents>(event: K, listener: (...args: RWSEvents[K]) => void): this {
-		super.once(event as string, (...args: any) => listener(...args));
+		super.once(event as string, (...args: RWSEvents[K]) => listener(...args));
 		return this;
 	}
 
 	/** @ignore */
 	public off<K extends keyof RWSEvents>(event: K, listener: (...args: RWSEvents[K]) => void): this {
-		super.off(event as string, (...args: any) => listener(...args));
+		super.off(event as string, (...args: RWSEvents[K]) => listener(...args));
 		return this;
 	}
 
@@ -293,7 +297,7 @@ export class RainlinkWebsocket extends EventEmitter {
 	}
 
 	protected async checkData() {
-		const data = this.socket?.read();
+		const data = this.socket?.read() as Buffer;
 
 		if (data && this.state === RainlinkWebsocketState.WAITING) {
 			this.state = RainlinkWebsocketState.PROCESSING;
@@ -341,7 +345,7 @@ export class RainlinkWebsocket extends EventEmitter {
 
 		if (info.mask) {
 			for (let i = 0; i < info.payloadLength; i++) {
-				slicedBuffer[i] = slicedBuffer[i] ^ info.mask[i & 3];
+				slicedBuffer[i] ^= info.mask[i & 3];
 			}
 		}
 
@@ -363,16 +367,16 @@ export class RainlinkWebsocket extends EventEmitter {
 
 			const nextData = await new Promise((resolve) => {
 				this.socket?.once("data", (data) => {
-					if (data.length > bytesLeft) {
-						this.socket?.unshift(data.subarray(bytesLeft));
-						data = data.subarray(0, bytesLeft);
-					}
-
-					resolve(data);
+					// Updated Buffer.concat to use Uint8Array
+					const updatedData = new Uint8Array([...data, ...(data.subarray(0, bytesLeft) as Uint8Array)]);
+					const slicedData = updatedData.subarray(0, bytesLeft);
+					this.socket?.unshift(data.subarray(bytesLeft));
+					resolve(slicedData);
 				});
 			});
 
-			data = Buffer.concat([data, nextData as Uint8Array]);
+			const updatedData = new Uint8Array([...data, ...(nextData as Uint8Array)]);
+			data = Buffer.from(updatedData);
 		}
 
 		const headers = this.parseFrameHeader(info, data);
@@ -432,7 +436,8 @@ export class RainlinkWebsocket extends EventEmitter {
 			}
 
 			case 0x9: {
-				const pong = Buffer.allocUnsafe(2);
+				// Updated pong to use Uint8Array
+				const pong = new Uint8Array(2);
 				pong[0] = 0x8a;
 				pong[1] = 0x00;
 
@@ -444,7 +449,6 @@ export class RainlinkWebsocket extends EventEmitter {
 			case 0xa: {
 				this.emit("pong");
 
-				// TODO: Delete break;
 				break;
 			}
 

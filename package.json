@@ -1,6 +1,6 @@
 {
 	"name": "@kenabot/rainlink",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"originalVersion": "1.2.7",
 	"description": "Another lavalink wrapper but focus on stability and rich features",
 	"repository": {
